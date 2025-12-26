@@ -48,7 +48,7 @@ loader.load(
     const maxDim = Math.max(size.x, size.y, size.z);
     const fov = camera.fov * (Math.PI / 180);
     let cameraZ = Math.abs((maxDim / 2) / Math.tan(fov / 2));
-    cameraZ *= 1.6; // padding
+    cameraZ *= 0.9; // padding
 
     camera.position.set(0, maxDim * 0.6, cameraZ);
     camera.lookAt(0, 0, 0);
