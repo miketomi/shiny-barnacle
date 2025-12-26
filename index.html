@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Three.js Starter</title>
+    <style>
+      html, body { margin: 0; height: 100%; overflow: hidden; }
+      canvas { display: block; }
+    </style>
+
+    <!-- Import map: makes `import ... from "three"` work in the browser -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.module.js",
+          "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.155.0/examples/jsm/"
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    <!-- IMPORTANT: must be type="module" -->
+    <script type="module" src="./index.js"></script>
+  </body>
+</html>
