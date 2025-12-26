@@ -7,10 +7,10 @@ scene.background = new THREE.Color(0x111111);
 
 // Camera
 const camera = new THREE.PerspectiveCamera(
-  60,
-  window.innerWidth / window.innerHeight,
-  0.1,
-  1000
+    60,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
 );
 camera.position.set(0, 1.5, 4);
 
@@ -32,87 +32,58 @@ scene.add(dir);
 
 // Load GLTF
 const loader = new GLTFLoader();
-loader.load(
-  "./models/soft.gltf",
-  (gltf) => {
-    const model = gltf.scene;
-    scene.add(model);
 
-    // Auto-center + auto-fit camera to model (so it appears even if huge/tiny)
-    const box = new THREE.Box3().setFromObject(model);
-    const size = box.getSize(new THREE.Vector3());
-    const center = box.getCenter(new THREE.Vector3());
+function loadModel(modelPath) {
+    loader.load(
+        modelPath,
+        (gltf) => {
+            const model = gltf.scene;
+            scene.add(model);
 
-    model.position.sub(center); // center model at origin
+            // Auto-center + auto-fit camera to model (so it appears even if huge/tiny)
+            const box = new THREE.Box3().setFromObject(model);
+            const size = box.getSize(new THREE.Vector3());
+            const center = box.getCenter(new THREE.Vector3());
 
-    const maxDim = Math.max(size.x, size.y, size.z);
-    const fov = camera.fov * (Math.PI / 180);
-    let cameraZ = Math.abs((maxDim / 2) / Math.tan(fov / 2));
-    cameraZ *= 0.9; // padding
+            model.position.sub(center); // center model at origin
 
-    camera.position.set(0, maxDim * 0.6, cameraZ);
-    camera.lookAt(0, 0, 0);
+            const maxDim = Math.max(size.x, size.y, size.z);
+            const fov = camera.fov * (Math.PI / 180);
+            let cameraZ = Math.abs((maxDim / 2) / Math.tan(fov / 2));
+            cameraZ *= 0.9; // padding
 
-    controls.target.set(0, 0, 0);
-    controls.update();
+            camera.position.set(0, maxDim * 0.6, cameraZ);
+            camera.lookAt(0, 0, 0);
 
-    console.log("Loaded:", gltf);
-  },
-  (progress) => {
-    // optional
-    // console.log((progress.loaded / progress.total) * 100 + "%");
-  },
-  (error) => {
-    console.error("GLTF load error:", error);
-  }
-);
+            controls.target.set(0, 0, 0);
+            controls.update();
 
-loader.load(
-  "./models/path.gltf",
-  (gltf) => {
-    const model = gltf.scene;
-    scene.add(model);
+            console.log("Loaded:", gltf);
+        },
+        (progress) => {
+            // optional
+            // console.log((progress.loaded / progress.total) * 100 + "%");
+        },
+        (error) => {
+            console.error("GLTF load error:", error);
+        }
+    );
+}
 
-    // Auto-center + auto-fit camera to model (so it appears even if huge/tiny)
-    const box = new THREE.Box3().setFromObject(model);
-    const size = box.getSize(new THREE.Vector3());
-    const center = box.getCenter(new THREE.Vector3());
-
-    model.position.sub(center); // center model at origin
-
-    const maxDim = Math.max(size.x, size.y, size.z);
-    const fov = camera.fov * (Math.PI / 180);
-    let cameraZ = Math.abs((maxDim / 2) / Math.tan(fov / 2));
-    cameraZ *= 0.9; // padding
-
-    camera.position.set(0, maxDim * 0.6, cameraZ);
-    camera.lookAt(0, 0, 0);
-
-    controls.target.set(0, 0, 0);
-    controls.update();
-
-    console.log("Loaded:", gltf);
-  },
-  (progress) => {
-    // optional
-    // console.log((progress.loaded / progress.total) * 100 + "%");
-  },
-  (error) => {
-    console.error("GLTF load error:", error);
-  }
-);
+loadModel("./models/soft.gltf");
+loadModel("./models/path.gltf");
 
 // Resize
 window.addEventListener("resize", () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
 // Animate
 function animate() {
-  requestAnimationFrame(animate);
-  controls.update();
-  renderer.render(scene, camera);
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
 }
 animate();
