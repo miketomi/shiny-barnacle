@@ -33,7 +33,42 @@ scene.add(dir);
 // Load GLTF
 const loader = new GLTFLoader();
 loader.load(
-  "./models/soft.gltf", // <-- change to your file name
+  "./models/soft.gltf",
+  (gltf) => {
+    const model = gltf.scene;
+    scene.add(model);
+
+    // Auto-center + auto-fit camera to model (so it appears even if huge/tiny)
+    const box = new THREE.Box3().setFromObject(model);
+    const size = box.getSize(new THREE.Vector3());
+    const center = box.getCenter(new THREE.Vector3());
+
+    model.position.sub(center); // center model at origin
+
+    const maxDim = Math.max(size.x, size.y, size.z);
+    const fov = camera.fov * (Math.PI / 180);
+    let cameraZ = Math.abs((maxDim / 2) / Math.tan(fov / 2));
+    cameraZ *= 0.9; // padding
+
+    camera.position.set(0, maxDim * 0.6, cameraZ);
+    camera.lookAt(0, 0, 0);
+
+    controls.target.set(0, 0, 0);
+    controls.update();
+
+    console.log("Loaded:", gltf);
+  },
+  (progress) => {
+    // optional
+    // console.log((progress.loaded / progress.total) * 100 + "%");
+  },
+  (error) => {
+    console.error("GLTF load error:", error);
+  }
+);
+
+loader.load(
+  "./models/path.gltf",
   (gltf) => {
     const model = gltf.scene;
     scene.add(model);
